@@ -48,5 +48,7 @@ localhost
 
 6) run "ansible-playbook docker-install.yml" to install docker on newly provisioned ec2 instance.
 
-7) then run "ansible-playbook rundockercontainer-curl.yml"
+7) then run "ansible-playbook rundockercontainer-curl.yml" to build the docker image and run it.
+
+The Solution task and detailed steps and technical arguments are attached.
 
