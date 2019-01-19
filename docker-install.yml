@@ -11,8 +11,6 @@
 
   - name: Enable AWS RHEL extras repository
     shell: yum-config-manager --enable rhui-REGION-rhel-server-extras
-  - name: Execute yum updates
-    yum: name=* state=latest
   - name: Install yum utils
     yum:
       name: yum-utils
@@ -73,3 +71,5 @@
       groups: docker
       append: yes
     become: yes
+  - name: reset ssh connection to allow user changes to affect 'current login user'
+    meta: reset_connection
