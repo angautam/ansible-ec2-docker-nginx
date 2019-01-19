@@ -1,5 +1,5 @@
 #Pre-requisite
-#Pip is not available in RHEL core repositories. To install pip we need to enable the EPEL repository:
+#Pip is not available in CentOS 7 core repositories. To install pip we need to enable the EPEL repository:
 #sudo yum install epel-release
 #Once the EPEL repository is enabled we can install pip and all of it’s dependencies with the following command:
 #sudo yum install python-pip
@@ -12,7 +12,6 @@
 
 #sudo pip install --upgrade pip
 #sudo pip install boto3
-#sudo pip install boto
 #sudo yum install ansible
 
 ---
@@ -25,7 +24,7 @@
     vars:
       instance_type: t2.micro
       security_group: ansible-automation # Change the security group name here
-      image: ami-0b500ef59d8335eee # This is an AMI i created myself
+      image: ami-0b500ef59d8335eee # This is an AMI Redhat Linux 64 bit distribution
       keypair: linux_aws # This is one of my keys that i already have in AWS
       region: us-east-2 # Change the Region
       count: 1
@@ -87,7 +86,7 @@
         with_items: "{{ ec2.instances }}"
         args:
           tags:
-            Name: docker-nginx-webserver3
+            Name: docker-nginx-webserver
 
       - name: Add the newly created EC2 instance(s) to host group
         lineinfile: dest={{ hostpath }}
