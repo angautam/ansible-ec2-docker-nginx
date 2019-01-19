@@ -1,6 +1,3 @@
-#PREREQ: Install pip docker and docker-py
-
-
 ---
 
 - name: Configure EC2 instance
@@ -8,21 +5,8 @@
   connection: ssh
 
   tasks:
-  - name: Enable RHEL extras repository
-    shell: sudo yum-config-manager --enable rhel-7-server-extras-rpms
-
-  - name: Enable AWS RHEL extras repository
-    shell: sudo yum-config-manager --enable rhui-REGION-rhel-server-extras
-  - name: Execute yum updates
-    yum: name=* state=latest
-    become: yes
-  - name: Install yum utils
-    yum:
-      name: yum-utils
-      state: latest
-    become: yes
-  - name: Installing essentials
-    command: sudo yum install wget curl vim -y
+  - name: Installing Curl Command
+    command: sudo yum install curl -y
   - name: Restarting docker service
     command: sudo systemctl restart docker
   - name: copy Dockerfile to ec2 instance
@@ -34,7 +18,18 @@
     copy:
       src: index.html
       dest: /home/ec2-user
-  - name: Build image and with buildargs
+  - name: Build docker image using Dockerfile
     shell: docker build -t angautam/nginx:v1 .
   - name: Run container with custom built docker image
     shell: docker run -dP --name mynginx -p 80:80 angautam/nginx:v1
+  - name: Check that you can connect (GET) to a page and it returns a status 200
+    uri:
+      url: http://localhost
+
+# Check that a page returns a status 200 and fail if the word "Hello World" is not
+# in the page contents.
+  - uri:
+      url: http://localhost
+      return_content: yes
+    register: this
+    failed_when: "'Hello World' not in this.content"
