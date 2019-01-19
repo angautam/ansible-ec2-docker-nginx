@@ -1,0 +1,40 @@
+#PREREQ: Install pip docker and docker-py
+
+
+---
+
+- name: Configure EC2 instance
+  hosts: webserver
+  connection: ssh
+
+  tasks:
+  - name: Enable RHEL extras repository
+    shell: sudo yum-config-manager --enable rhel-7-server-extras-rpms
+
+  - name: Enable AWS RHEL extras repository
+    shell: sudo yum-config-manager --enable rhui-REGION-rhel-server-extras
+  - name: Execute yum updates
+    yum: name=* state=latest
+    become: yes
+  - name: Install yum utils
+    yum:
+      name: yum-utils
+      state: latest
+    become: yes
+  - name: Installing essentials
+    command: sudo yum install wget curl vim -y
+  - name: Restarting docker service
+    command: sudo systemctl restart docker
+  - name: copy Dockerfile to ec2 instance
+    copy:
+      src: Dockerfile
+      dest: /home/ec2-user
+
+  - name: copy index.html to ec2 instance
+    copy:
+      src: index.html
+      dest: /home/ec2-user
+  - name: Build image and with buildargs
+    shell: docker build -t angautam/nginx:v1 .
+  - name: Run container with custom built docker image
+    shell: docker run -dP --name mynginx -p 80:80 angautam/nginx:v1
