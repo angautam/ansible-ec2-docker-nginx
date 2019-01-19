@@ -2,9 +2,11 @@
 
 The playbook lets you provision EC2 instance on AWS cloud and install docker.
 
+The image I am using here is of Red Hat distribution AMI image from AWS cloud.
+
 Instruction :
 
-1) as prerequisites install below and ensure its done in order:
+1) as prerequisites install below and ensure its done in order on the control node of ansible.
 
 #Pre-requisite
 
@@ -38,11 +40,13 @@ localhost
 
 [webserver]
 
-3) export the secret key and access key of AWS account 
+3) export the secret key and access key of AWS account on terminal.
 
 4) run "ansible-playbook launchec2-ansible.yml -vvv"
 
 5) after this is done, ensure your hosts entry gets updated with public ip and user key details just under tag [webserver]
 
 6) run "ansible-playbook docker-install.yml" to install docker on newly provisioned ec2 instance.
+
+7) then run 
 
