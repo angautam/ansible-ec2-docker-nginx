@@ -35,6 +35,7 @@ Instruction :
 #sudo yum install ansible
 
 2) under /etc/ansible/hosts file. place below entry:
+
 [local]
 localhost
 
